@@ -11,8 +11,8 @@ import org.openqa.selenium.support.ui.WebDriverWait;
  */
 public class BasePage <T extends LoadableComponent<T>> extends LoadableComponent<T>{
 
-private static final int TIMEOUT = 30;
-private static final int POLLING = 100;
+protected static final int TIMEOUT = 30;
+protected static final int POLLING = 100;
 protected WebDriver driver;
 protected WebDriverWait wait;
 

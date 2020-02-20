@@ -20,7 +20,7 @@ public class TestDataUtil {
 	public static String readCSVFile(String testcaseid, String columnname) throws FileNotFoundException
 	{
 		String value = "";
-		String datapath = System.getProperty("user.dir")+File.separator+"TestData"+File.separator+"flightsearch.csv";
+		String datapath = System.getProperty("user.dir")+File.separator+"TestData.csv";
 		FileReader reader = new FileReader(datapath);
 		
 		CsvParserSettings settings = new CsvParserSettings();
