@@ -2,13 +2,14 @@ package com.wallethub.automation.tests;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import com.wallethub.automation.pages.GreatDecisionPage;
 import com.wallethub.automation.pages.WHLandingPage;
+import com.wallethub.automation.pages.WHReviewPage;
 import com.wallethub.automation.util.TestDataUtil;
 
 public class WHTests {
@@ -25,23 +26,30 @@ public class WHTests {
 		 driver = new ChromeDriver(opt);
 		 driver.manage().window().maximize();		 
 	  }
-	  
-	  /**
-	   * This test will signup a new account and validates
-	   * if next page with title 'Great Decision' appears
-	   * @throws FileNotFoundException
-	   */
+	
 	  @Test
-	  public void testSignup() throws FileNotFoundException
-	  {   
-		  //Get Test Data
-		  String emailid = null;
+	  public void testSubmitReview() throws FileNotFoundException
+	  {
+		  //Get test data
+		  String comments = null;
+		  String product = null;
+		  String email = null;
 		  String password = null;
-		  emailid = TestDataUtil.readCSVFile("testSignup", "emailid");
-		  password = TestDataUtil.readCSVFile("testSignup", "password");
+		  comments = TestDataUtil.readCSVFile("testSubmitReview", "reviewcomments");
+		  product = TestDataUtil.readCSVFile("testSubmitReview", "productname");
+		  email = TestDataUtil.readCSVFile("testSubmitReview", "emailid");
+		  password = TestDataUtil.readCSVFile("testSubmitReview", "password");
 		  
-		  //Launch App and validate
-		  WHLandingPage signuppage = new WHLandingPage(driver).get();  
-		  GreatDecisionPage gdpge  = signuppage.signup(emailid, password);
+		  //Login
+		  WHLandingPage landinpage = new WHLandingPage(driver).get();
+		  landinpage.login(email, password);
+		  
+		  //Navigate to test company page
+		  WHReviewPage reviewpage = new WHReviewPage(driver).get();
+          reviewpage.hoverRatingBoxAndClick();
+                 
+          //Submit Comments and Validate
+          reviewpage.submitComments(product, comments);
+          Assert.assertTrue(reviewpage.validateComments(comments));
 	  }
 }

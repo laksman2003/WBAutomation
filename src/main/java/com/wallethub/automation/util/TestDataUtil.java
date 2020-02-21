@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.List;
-
 import com.univocity.parsers.csv.CsvParser;
 import com.univocity.parsers.csv.CsvParserSettings;
 
@@ -32,17 +31,19 @@ public class TestDataUtil {
         for (String[] row: rows)
         {   
         	for(String columnvalue : row)
-        	{
-        		if(columnvalue.equals(testcaseid))
+        	{   
+        		if(columnvalue!=null)
         		{
-        			value = row[1];
-        			break;
+        			if(columnvalue.toLowerCase().equals(testcaseid.toLowerCase()))
+            		{
+            			value = row[1];
+            			break;
+            		}
         		}
+        		
         	}
         }
-		
 		return value;
-		
 	}
 	
 }

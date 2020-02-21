@@ -1,2 +1,2 @@
-TestCaseId,emailid,password,firstname,lastname
-testSignup,test@gmail.com,test123$,test2,test2last
+TestCaseId,emailid,password,firstname,lastname,reviewcomments,productname
+testSubmitReview,laksman2003@gmail.com,Acc12341$,lakshman,shiva,TestingCommentsTestingCommentsTestingCommentsTestingCommentsTestingCommentsTestingCommentsTestingCommentsTestingCommentsTestingCommentsTestingComments,Health Insurance

@@ -1,20 +1,15 @@
 package com.wallethub.automation.pages;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Properties;
-
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.pagefactory.AjaxElementLocatorFactory;
+import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
+import com.wallethub.automation.util.PropertyUtil;
 
 public class WHLandingPage extends BasePage<WHLandingPage> {
 	
@@ -38,41 +33,41 @@ public class WHLandingPage extends BasePage<WHLandingPage> {
 	@FindBy(css="button[type='button']")
 	WebElement join;
 	
-	/**
-	 * This method is to sign up a new user account
-	 * @param emailid
-	 * @param password
-	 * @return
-	 */
-	public GreatDecisionPage signup(String emailid, String password)
-	{
-	    this.emailid.sendKeys(emailid);
-	    this.passwd.sendKeys(password);
-	    this.confirmpsswd.sendKeys(password);
-	    ((JavascriptExecutor )driver).executeScript("arguments[0].click()", this.getfreereport);
-	    this.join.click();
-		return new GreatDecisionPage(this.driver);
-	}
+	@FindBy(css="nav[class*='join'] >ul>li:nth-child(2)>a")
+	WebElement login;
 	
 	@Override
 	protected void isLoaded() throws Error {
-		
-	Assert.assertTrue(driver.getCurrentUrl().contains("light"));
-	this.wait.until(ExpectedConditions.visibilityOf(this.join));
-	
+		try {
+				Assert.assertTrue(driver.getCurrentUrl().contains("light"));
+				this.wait.until(ExpectedConditions.visibilityOf(this.join));
+		}
+		catch(Exception e)
+		{
+			throw new Error();
+		}
 	}
 
 	@Override
 	protected void load() {
-		 
-		Properties prop = null; 
-		try
-		{
-		    prop = new Properties();
-			prop.load(new FileInputStream(System.getProperty("user.dir")+File.separator+"config.properties"));
-			
-		}
-		catch(Exception e) {}
-		driver.get(prop.getProperty("produrl"));			
+		
+		driver.get(PropertyUtil.getProperty("produrl"));			
 	}
+	
+	public void login(String email, String password)
+	{
+	  this.login.click();
+	  this.emailid.sendKeys(email);
+	  this.passwd.sendKeys(password);
+	  this.join.click();
+	  
+	  ExpectedCondition<Boolean> pageLoadCondition = new
+	            ExpectedCondition<Boolean>() {
+	                public Boolean apply(WebDriver driver) {                	
+	                    return ((JavascriptExecutor)driver).executeScript("return document.readyState").equals("complete");
+	                }
+	            };
+	   wait.until(pageLoadCondition);
+	}
+
 }
