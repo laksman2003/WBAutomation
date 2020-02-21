@@ -38,7 +38,14 @@ public class WHLandingPage extends BasePage<WHLandingPage> {
 	
 	@Override
 	protected void isLoaded() throws Error {
-		try {
+		try {  
+			ExpectedCondition<Boolean> pageLoadCondition = new
+		            ExpectedCondition<Boolean>() {
+		                public Boolean apply(WebDriver driver) {                	
+		                    return ((JavascriptExecutor)driver).executeScript("return document.readyState").equals("complete");
+		                }
+		            };
+		   wait.until(pageLoadCondition);
 				Assert.assertTrue(driver.getCurrentUrl().contains("light"));
 				this.wait.until(ExpectedConditions.visibilityOf(this.join));
 		}

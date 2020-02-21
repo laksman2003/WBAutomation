@@ -6,8 +6,12 @@ import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+
+import com.wallethub.automation.pages.FBHomePage;
+import com.wallethub.automation.pages.FBLandingPage;
 import com.wallethub.automation.pages.WHLandingPage;
 import com.wallethub.automation.pages.WHReviewPage;
 import com.wallethub.automation.util.TestDataUtil;
@@ -51,5 +55,28 @@ public class WHTests {
           //Submit Comments and Validate
           reviewpage.submitComments(product, comments);
           Assert.assertTrue(reviewpage.validateComments(comments));
+	  }
+	  
+	  @Test
+	  public void testFBStatusMessage() throws FileNotFoundException
+	  {
+		 //Get Test data
+		 String emailid = null;
+		 String password = null;
+		 String statusmessage = "Test";
+		 emailid = TestDataUtil.readCSVFile("testFBStatusMessage", "emailid");
+		 password = TestDataUtil.readCSVFile("testFBStatusMessage", "password");
+		 
+		 //Login FB and create a post
+		 FBLandingPage loginpage = new FBLandingPage(this.driver).get();
+		 FBHomePage homepage = loginpage.loginFB(emailid, password);
+		 homepage.createStatusMessage(statusmessage);
+	  }
+	  
+	  @AfterMethod
+	  public void cleanup()
+	  {
+		  this.driver.quit();
+		  this.driver = null;
 	  }
 }
